@@ -16,34 +16,13 @@ $(document).ready(function () {
         elemento.style.color = cor;
     });
 
-    // shop
-    const options = document.getElementsByClassName("opcoes_moedas");
 
-    var myFunction = function () {
-        var option = this.getAttribute("value");
-        switch (option) {
-            case "optS":
-                window.open("https://buy.stripe.com/test_28o2b36ef8PFaVafYZ", "_blank");
-                break;
-            case "optM":
-                window.open("https://buy.stripe.com/test_fZe5nf1XZ8PF6EU4gi", "_blank");
-                break;
-            case "optA":
-                window.open("https://buy.stripe.com/test_28odTLfOPc1R0gwfZ1", "_blank");
-                break;
-        }
-    };
-
-    for (var i = 0; i < options.length; i++) {
-        options[i].addEventListener('click', myFunction, false);
-    }
-
-    // criar serviço
+    // criar serviço -------------------------------------------------------------------------------
     $(".btn_modal_criar_servico").click(function () {
         $(".moda_criar_servico").css("display", "block");
     });
 
-    // menu line
+    // menu line -----------------------------------------------------------------------------------
 });
 
  function toggleMenu() {
@@ -52,9 +31,52 @@ $(document).ready(function () {
         var sidebar = $('.sidebar');
         if (!$('.menu-btn').hasClass('change')) {
             sidebar.removeClass('ativado');
+            $('body').css('overflow','auto');
         } else {
             sidebar.addClass('ativado');
+            $('body').css('overflow','hidden');
         }
     }
 
 
+
+// links -------------------------------------------------------------------------------------
+   $(document).ready(function () {
+       $('.moedas_usuario_mobile').click(function(){
+        console.log("fssvadfmi")
+        window.location.href = "shop.php"
+   });
+
+   // btn_atualizar -------------------------------------------------------------------------------------
+    $('.btn_deslogar').click(function(){
+        window.location.href = window.location.href + "?deslogar=true";
+   });
+
+   $('.btn_servico_publicar').click(function(){
+    alert("fgfxz");
+        $('#criar_servico').submit();
+   });
+
+  $('.btn_atualizar_usuario').click(function() {
+        window.location.href = "perfil.php?atualizar=true"
+    }); 
+  $('.btn_salvar_usuario').click(function() {
+        window.location.href = "perfil.php?salvar=true"
+    }); 
+  $('.btn_cancelar_usuario').click(function() {
+        window.location.href = "perfil.php";
+    });
+
+
+     // shop----------------------------------------------------------------
+ 
+        $('#pS').click(function() {
+        window.open("https://buy.stripe.com/test_28o2b36ef8PFaVafYZ", "_blank");
+    }); 
+    $('#pM').click(function() {
+        window.open("https://buy.stripe.com/test_fZe5nf1XZ8PF6EU4gi", "_blank");
+    }); 
+    $('#pA').click(function() {
+        window.open("https://buy.stripe.com/test_28odTLfOPc1R0gwfZ1", "_blank");
+    }); 
+});

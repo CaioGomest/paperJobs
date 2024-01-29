@@ -6,6 +6,13 @@ require('functions/functions_servicos.php');
 
 $usuario_dados = listarUsuarios($conn, $_SESSION["usuario"]["usuario_id"]);
 
+
+if (empty($usuario_dados[0]['usuario_id']))
+    deslogar();
+
+if (isset($_GET["deslogar"]) && $_GET["deslogar"] == "true")
+    deslogar();
+
 ?>
 
 <head>
@@ -80,8 +87,32 @@ $usuario_dados = listarUsuarios($conn, $_SESSION["usuario"]["usuario_id"]);
     </div>
 </body>
 <div class="sidebar">
-    <div class="sidebar_header"></div>
-    <div class="sidebar_body"></div>
-    <div class="sidebar_footer"></div>
+    <div class="sidebar_header">
+        <img class="sidebar_header_img" src="assets/iconPerfil/icon_perfil.png" alt="">
+        <h3><?php echo $usuario_dados[0]["usuario_nome"] ?></h3>
+    </div>
+    <div class="sidebar_body">
+        <div class="container_options_sidebar">
+            <a href="home.php">
+                <div class="options_sidebar"><b>Home</b></div>
+            </a>
+            <a href="perfil.php">
+                <div class="options_sidebar"><b>Perfil</b></div>
+            </a>
+            <a href="perfil_pj.php">
+                <div class="options_sidebar"><b>Perfil PJ</b></div>
+            </a>
+            <a href="criar_servico.php">
+                <div class="options_sidebar"><b>Criar Serviço</b></div>
+            </a>
+            <a href="shop.php">
+                <div class="options_sidebar"><b>Shop</b></div>
+            </a>
+        </div>
+        <div class="btn_deslogar">
+            <h3>Sair</h3>
+        </div>
+    </div>
+
 </div>
 <script src="js/javascript.js"></script>

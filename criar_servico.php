@@ -1,6 +1,20 @@
 <?php
 require('header.php');
 
+$titulo = isset($_REQUEST['titulo']) ? $_REQUEST['titulo'] : null;
+$descricao = isset($_REQUEST['descricao']) ? $_REQUEST['descricao'] : null;
+$moedas_desbloquear = isset($_REQUEST['moedas_desbloquear']) ? $_REQUEST['moedas_desbloquear'] : null;
+$orcamento_max = isset($_REQUEST['orcamento_max']) ? $_REQUEST['orcamento_max'] : null;
+$tecnologias_usadas = isset($_REQUEST['tecnologias_usadas']) ? $_REQUEST['tecnologias_usadas'] : null;
+$prazo_max = isset($_REQUEST['prazo_max']) ? $_REQUEST['prazo_max'] : null;
+$contato = isset($_REQUEST['contato']) ? $_REQUEST['contato'] : null;
+
+if ($titulo) {
+    $criar_servico = criaServico($conn, $_SESSION["usuario"]["usuario_id"], $titulo, $descricao, $moedas_desbloquear, 0, $orcamento_max, $tecnologias_usadas, $prazo_max, $contato);
+
+    if ($criar_servico)
+        echo "SERVIÇO CRIADOOOO";
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -27,36 +41,53 @@ require('header.php');
     <body>
         <div class="container_criar_servico">
             <div class="formulario_servico">
-                <h2>Tudo pronto para solicitar um pedido?</h2>
-                <img src="assets/icons/exclamacao.svg" alt="">
-                <span>É importante deixar bem claro o seu pedido para que assim profissionais se interessem mais por
-                    ele</span>
+                <form id="criar_servico" action="" method="GET">
+                    <h2>Tudo pronto para solicitar um pedido?</h2>
+                    <img src="assets/icons/exclamacao.svg" alt="">
+                    <span>É importante deixar bem claro o seu pedido para que assim profissionais se interessem mais por
+                        ele</span>
 
-                <h3 style="margin:15px 0px;" for="Título do pedido">Título do pedido</h3>
-                <select class="input_padrao" name="" id="">
-                    <option value="">Desenvolvimento de Site</option>
-                    <option value="">Desenvolvimento de Sistema</option>
-                    <option value="">Desenvolvimento de Desing</option>
-                    <option value="">Desenvolvimento de Identidade Visual</option>
-                    <option value="">Prestação de serviço</option>
-                </select>
-                <h3 for="Descrição">Descrição <img src="assets/icons/asterisco.svg" alt=""></h3>
-                <textarea class="input_padrao" style="height: 126px;" name="" id="" cols="30" rows="10"></textarea>
-                <div class="infos_extra">
-                    <span><b><label for="">Orçamento Máximo</label></b><img src="assets/icons/asterisco.svg"
-                            alt=""></span>
-                    <input class="input_padrao" type="number">
-                    <span><b><label for="prazoDesejado">Prazo desejado</label></b><img src="assets/icons/asterisco.svg"
-                            alt=""></span>
-                    <input class="input_padrao" type="date" id="prazoDesejado">
-                    <div>
-                        <input type="radio" id="semPrazo" name="prazoOpcao" value="semPrazo">
-                        <label for="semPrazo">Sem prazo</label>
+                    <h3 style="margin:15px 0px;" for="Título do pedido">Título do pedido</h3>
+                    <select class="input_padrao" name="titulo" id="">
+                        <option value="Desenvolvimento de Site">Desenvolvimento de Site</option>
+                        <option value="Desenvolvimento de Sistema">Desenvolvimento de Sistema</option>
+                        <option value="Desenvolvimento de Design">Desenvolvimento de Design</option>
+                        <option value="Desenvolvimento de Identidade Visual">Desenvolvimento de Identidade Visual
+                        <option value="Desenvolvimento de Identidade Visual">Manutenção de Software
+                        <option value="Desenvolvimento de Identidade Visual">Assessoria
+                        <option value="Desenvolvimento de Identidade Visual">Consulta
+                        </option>
+                        <option value="Prestação de serviço">Prestação de serviço</option>
+                    </select>
 
-                        <input type="radio" id="comPrazo" name="prazoOpcao" value="comPrazo">
-                        <label for="comPrazo">Com prazo</label>
+                    <h3 for="Descrição">Descrição <img src="assets/icons/asterisco.svg" alt=""></h3>
+                    <textarea class="input_padrao" style="height: 126px;" name="descricao" id="" cols="30"
+                        rows="10"></textarea>
+                    <div class="infos_extra">
+                        <span><b><label for="">Tecnologias que serão usadas</label></b><img
+                                src="assets/icons/asterisco.svg" alt=""></span>
+                        <input class="input_padrao" name="tecnologias_usadas" type="text">
+                        <span><b><label for="">Orçamento
+                                    Máximo</label></b><img src="assets/icons/asterisco.svg" alt=""></span>
+                        <input class="input_padrao" name="orcamento_max" type="number">
+                        <span><b><label for="prazoDesejado">Prazo desejado</label></b><img
+                                src="assets/icons/asterisco.svg" alt=""></span>
+                        <input class="input_padrao" type="date" name="prazo_max" id="prazoDesejado">
+                        <div style="margin-bottom:10px" class="prazo">
+                            <input type="radio" id="semPrazo" value="semPrazo">
+                            <label for="semPrazo">Sem prazo</label>
+
+                            <input type="radio" id="comPrazo" value="comPrazo">
+                            <label for="comPrazo">Com prazo</label>
+                        </div>
+                        <label for=""><b>Quantidade de Moedas para Desbloquear</b></label>
+                        <input class="input_padrao" name="moedas_desbloquear" type="number">
+
+                        <label for=""><b>Contatos</b></label>
+                        <input class="input_padrao" name="Contatos" type="text">
                     </div>
-                </div>
+
+                </form>
             </div>
 
 

@@ -48,13 +48,14 @@ $quantos_desbloquearam_servico = verificaServicoDesbloqueado($conn, $id_servico)
                                     <div class="dono_servico" style="font-size:1.2em; margin:5px;">Informações</div>
                                 </div>
                                 <div class="card_body" style="width: 90%;">
-                                    <div style="margin-top:5px;">Orçamento Máximo</div>
-                                    <div class="orcamento_max" style="margin-left: 10px;"><b>R$
-                                        </b><?php echo $servico['servico_orcamento_max']; ?></div>
-                                    <div style="margin-top:5px;">Prazo Desejado</div>
+                                    <div style="margin-top:5px;"><b> Orçamento Máximo</b></div>
+                                    <div class="orcamento_max" style="margin-left: 10px;">R$
+                                        <?php echo $servico['servico_orcamento_max']; ?></div>
+                                    <div style="margin-top:5px;"><b>Prazo Desejado</b></div>
                                     <div class="prazo_max" style="margin-left: 10px;">
-                                        <?php echo $servico['servico_prazo_max']; ?></div>
-                                    <div style="margin-top:5px;">Tecnologias Desejadas</div>
+                                        <?php echo $servico['servico_prazo_max'] != null ? $servico['servico_prazo_max'] : 'Sem Prazo'; ?>
+                                    </div>
+                                    <div style="margin-top:5px;"><b>Tecnologias Desejadas</b></div>
                                     <div class="tecnologias_usadas" style="margin-left: 10px;">
                                         <?php echo $servico['servico_tecnologias_usadas']; ?></div>
                                 </div>

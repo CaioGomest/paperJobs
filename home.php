@@ -29,7 +29,7 @@ require('header.php');
             </div>
             <div class="container_cards_servicos">
                 <?php
-                $listaServicos = listaServicos($conn);
+                $listaServicos = listaServicos($conn, null, null, null, null, null, 'servico_data');
                 if (!empty($listaServicos)) {
                     foreach ($listaServicos as $servico) {
                         $varfica_servico_desbloqueado = verificaServicoDesbloqueado($conn, $servico['servico_id'], $_SESSION['usuario']["usuario_id"]);
@@ -44,7 +44,7 @@ require('header.php');
                                     // Limitar a descrição a 20 palavras
                                     $descricao = $servico['servico_descricao'];
                                     $palavras = explode(' ', $descricao);
-                                    if (count($palavras) > 15) {
+                                    if (count($palavras) > 8) {
                                         $descricao = implode(' ', array_slice($palavras, 0, 15)) . '...';
                                     }
                                     echo $descricao;
@@ -56,15 +56,19 @@ require('header.php');
                                         <?php //echo $servico['servico_valor']; ?></b>
                                 </div> -->
 
-                                <?php if ($varfica_servico_desbloqueado <= 0) { ?>
-                                    <div class="respostas_servico"> <span> !
+                                <?php if ($_SESSION['usuario']["usuario_id"] == $servico['servico_autor_id']) { ?>
+                                    <div class="respostas_servico" style="background-color:#d38900;"> <span> !
+                                            <?php echo "Detalhes do meu Serviço" ?></span>
+                                    </div>
+                                <?php } else if ($varfica_servico_desbloqueado <= 0) { ?>
+                                        <div class="respostas_servico"> <span> !
                                             <?php echo $servico['servico_status_nome']; ?></span>
-                                    </div>
+                                        </div>
                                 <?php } else { ?>
-                                    <div class="respostas_servico" style="background-color: #189200;font-size: 1.3em;"> <b
-                                            style="margin-left:10px">
-                                        </b><?php echo "Desbloqueado" ?>
-                                    </div>
+                                        <div class="respostas_servico" style="background-color: #189200;font-size: 1.3em;"> <b
+                                                style="margin-left:10px">
+                                            </b><?php echo "Desbloqueado" ?>
+                                        </div>
                                 <?php } ?>
 
                             </div>

@@ -3,32 +3,51 @@
 if (session_status() == PHP_SESSION_NONE)
     session_start();
 
-function criaServico($conn, $autor_id = NULL, $titulo = NULL, $descricao = NULL, $valor = NULL, $status = NULL, $orcamento_max = NULL, $tecnologias_usadas = NULL, $prazo_max = NULL, $contato = NULL)
+function criaServico($conn, $autor_id, $titulo, $descricao, $valor, $status, $orcamento_max = NULL, $tecnologias_usadas = NULL, $prazo_max = NULL, $contato = NULL)
 {
-    $query = "INSERT INTO servicos (servico_autor_id, servico_titulo,
-                            servico_descricao, servico_valor, servico_status,
-                            servico_orcamento_max, servico_tecnologias_usadas, 
-                            servico_prazo_max, servico_contato) 
-              VALUES ('" . mysqli_real_escape_string($conn, $autor_id) . "', 
-                      '" . mysqli_real_escape_string($conn, $titulo) . "', 
-                      '" . mysqli_real_escape_string($conn, $descricao) . "', 
-                      '" . mysqli_real_escape_string($conn, $valor) . "', 
-                      '" . mysqli_real_escape_string($conn, $status) . "', 
-                      '" . mysqli_real_escape_string($conn, $orcamento_max) . "', 
-                      '" . mysqli_real_escape_string($conn, $tecnologias_usadas) . "', 
-                      '" . mysqli_real_escape_string($conn, $prazo_max) . "', 
-                      '" . mysqli_real_escape_string($conn, $contato) . "')";
+    $query = "INSERT INTO servicos (servico_autor_id, servico_titulo, servico_descricao, servico_valor, servico_status, servico_orcamento_max, servico_tecnologias_usadas, servico_prazo_max) VALUES 
+    ('" . mysqli_real_escape_string($conn, $autor_id) . "', 
+     '" . mysqli_real_escape_string($conn, $titulo) . "', 
+     '" . mysqli_real_escape_string($conn, $descricao) . "', 
+     '" . mysqli_real_escape_string($conn, $valor) . "', 
+     '" . mysqli_real_escape_string($conn, $status);
 
+    // Adicionando os valores adicionais, se estiverem presentes
+    if ($orcamento_max !== NULL) {
+        $query .= "','" . mysqli_real_escape_string($conn, $orcamento_max);
+    } else {
+        $query .= ",0 ";
+    }
+
+    if ($tecnologias_usadas !== NULL) {
+        $query .= "','" . mysqli_real_escape_string($conn, $tecnologias_usadas);
+    } else {
+        $query .= ",NULL ";
+    }
+
+    if ($prazo_max !== NULL) {
+        $query .= "','" . mysqli_real_escape_string($conn, $prazo_max) . "'";
+    } else {
+        $query .= ",NULL ";
+    }
+
+    // Adicionando o valor para servico_contato
+    // if ($contato !== NULL) {
+    //     $query .= "'" . mysqli_real_escape_string($conn, $contato) . "'";
+    // } else {
+    //     $query .= "NULL";
+    // }
+
+    $query .= ")";
+    //echo $query;
     $result = mysqli_query($conn, $query);
 
     if ($result !== FALSE) {
-        return mysqli_insert_id($conn); // Retorna o ID do serviço inserido
+        return mysqli_insert_id($conn);
     } else {
         return "ERRO: " . mysqli_error($conn);
     }
 }
-
-
 
 function listaServicos($conn, $id = NULL, $servico_autor_id = NULL, $titulo = NULL, $tipo = NULL, $status = NULL, $order_by = NULL, $limite = NULL)
 {
@@ -53,7 +72,7 @@ function listaServicos($conn, $id = NULL, $servico_autor_id = NULL, $titulo = NU
         $query .= " AND servico_nome LIKE '%" . mysqli_real_escape_string($conn, $titulo) . "%'";
 
     if (!empty($order_by))
-        $query .= sprintf(" ORDER BY %s ", mysqli_real_escape_string($conn, $order_by));
+        $query .= sprintf(" ORDER BY %s ", mysqli_real_escape_string($conn, $order_by) . " DESC");
     //echo $query;
 
     $result = mysqli_query($conn, $query);

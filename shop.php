@@ -21,7 +21,7 @@ require("header.php")
             <h3>Não perca nenhum serviço por falta de Shurikens</h3>
         </div>
         <div class="shop_options">
-            <div class="opcoes_moedas">
+            <div class="opcoes_moedas" id="pS">
                 <div class="opcoes_header">
                     <h2>Pacote Simples</h2>
                 </div>
@@ -37,7 +37,7 @@ require("header.php")
                 </div>
             </div>
 
-            <div class="opcoes_moedas">
+            <div class="opcoes_moedas" id="pM">
                 <div class="opcoes_header">
                     <h2>Pacote Médio</h2>
                 </div>
@@ -52,7 +52,7 @@ require("header.php")
                     <div>por R$180,00</div>
                 </div>
             </div>
-            <div class="opcoes_moedas">
+            <div class="opcoes_moedas" id="pA">
                 <div class="opcoes_header">
                     <h2>Pacote Avançado</h2>
                 </div>

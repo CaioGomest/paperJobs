@@ -48,7 +48,7 @@ header {
 
 .ativado {
     transition: 0.4s;
-    width: 70%;
+    width: 80%;
 }
 
 .icon_ponto {
@@ -110,6 +110,7 @@ header {
 }
 
 .adicionar_servico {
+    border: white solid 1px;
     background-color: #A10F00;
     width: 50px;
     height: 50px;
@@ -183,13 +184,13 @@ header {
     width: 98%;
     margin: 15px;
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     flex-wrap: wrap;
 }
 
 .card_servico {
-    /* width: calc(100% / 4); */
-    width: 250px;
+    width: calc(100% / 5);
+    min-width: 250px;
     height: 200px;
     padding: 10px;
     background: #F0E9E9;
@@ -246,9 +247,11 @@ header {
 }
 
 .respostas_servico {
+    text-align: center;
     background-color: #A10F00;
     color: white;
-    padding: 2px;
+    padding: 5px;
+    font-weight: bold;
     width: 140px;
     height: 35px;
     border-radius: 10px;
@@ -292,6 +295,7 @@ header {
     width: 250px;
     padding: 5px 0px;
     height: 32px;
+    border: none;
     flex-shrink: 0;
     border-radius: 10px;
     background-color: #A10F00;
@@ -308,10 +312,69 @@ header {
     cursor: pointer;
 }
 
+.btn_atualizar_usuario {
+    width: 250px;
+    height: 50px;
+    border: none;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background-color: #ffffff;
+    color: #A10F00;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: bold;
+    line-height: normal;
+    cursor: pointer;
+}
+
+.btn_cancelar_usuario {
+    width: calc(95%/2);
+    margin-right: 10px;
+    height: 50px;
+    border: none;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background-color: #ffffff;
+    color: #A10F00;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: bold;
+    line-height: normal;
+    cursor: pointer;
+}
+
+.btn_salvar_usuario {
+    width: calc(95%/2);
+    height: 50px;
+    border: none;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background-color: #189200;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: bold;
+    line-height: normal;
+    cursor: pointer;
+}
+
 .btn_servico_desbloqueado {
     width: 250px;
     padding: 5px 0px;
     height: 32px;
+    border: none;
     flex-shrink: 0;
     border-radius: 10px;
     background-color: #189200;
@@ -331,9 +394,10 @@ header {
     width: 250px;
     padding: 5px 0px;
     height: 32px;
+    border: none;
     flex-shrink: 0;
     border-radius: 10px;
-    background-color: #E04737;
+    background-color: #A10F00;
     color: #ffffff;
     display: flex;
     align-items: center;
@@ -345,6 +409,7 @@ header {
     font-weight: 400;
     line-height: normal;
     cursor: pointer;
+    margin: 10px 0px 50px 0px;
 }
 
 .btn_servico_publicar:hover {
@@ -451,6 +516,170 @@ header {
     /* Adicione estilos para o seu menu aqui */
 }
 
+/*------- perfil -------*/
+.container-perfil {
+    width: 100%;
+    background-color: #A10F00;
+    padding: 20px 0px;
+    color: white;
+}
+
+.container-info-perfil {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.informacoes-perfil-selecionado {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.container-atualizar_usuario {
+    width: 350px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.containers-inputs {
+    width: 100%;
+}
+
+.usuario-input {
+    border-radius: 5px;
+    height: 30px;
+    width: 100%;
+    outline-style: auto;
+    margin: 5px 0px;
+    color: black;
+    background: white;
+}
+
+/*sidebar*/
+.sidebar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+
+.sidebar_header {
+    width: 90%;
+    height: 30%;
+    color: white;
+    border-bottom: 2px solid white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.sidebar_header_img {
+    height: 60%;
+}
+
+.sidebar_header h3 {
+    margin-top: 15px;
+}
+
+.sidebar_body {
+    margin-top: 20px;
+    width: 100%;
+    height: 70%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+
+}
+
+.container_options_sidebar {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.options_sidebar {
+    box-sizing: border-box;
+    width: 100%;
+    background-color: #7B0D02;
+    border-top: 1px solid white;
+    border-bottom: 1px solid white;
+    font-size: 1.5em;
+    color: white;
+    margin-top: 15px;
+    padding: 10px 10px;
+    cursor: pointer;
+    white-space: nowrap;
+    display: flex;
+    justify-content: space-between;
+}
+
+.options_sidebar::after {
+    content: ' >';
+    font-weight: bold;
+}
+
+
+.sidebar a {
+    text-decoration: none;
+}
+
+
+.options_sidebar b {
+    margin-left: 20px;
+}
+
+.btn_deslogar {
+    background-color: white;
+    color: #7B0D02;
+    font-size: 1.5em;
+    width: 120px;
+    height: 50px;
+    border-radius: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 50px;
+    margin-top: 10px;
+}
+
+/*perfil pj*/
+.container_portifolio_perfil_provedor {
+    width: 90%;
+    margin-top: 30px;
+}
+
+.content_portifolio {
+    background-color: gray;
+    width: 30%;
+
+}
+
+.content_portifolio .img_portifolio img {
+    width: 100%;
+    height: 100%;
+    object-fit: scale-down;
+    /* ou qualquer outro valor que desejar */
+}
+
+.nome_perfil_provedor {
+    display: flex;
+    justify-content: space-between;
+}
+
+.nome_perfil_provedor h3 {
+    margin: auto 0px;
+}
+
 /*------- Mobile -------*/
 @media(max-width: 750px) {
 
@@ -520,7 +749,7 @@ header {
     .card_servico {
         margin-top: 20px;
         width: 90%;
-        height: 160px !important;
+        height: 190px !important;
     }
 
     .card_footer {
@@ -542,11 +771,9 @@ header {
     }
 
     .opcoes_moedas {
-        width: 90%;
-    }
-
-    .opcoes_moedas {
+        box-shadow: -1px 1px 6px black;
         height: 165px;
+        width: 80%;
         min-height: 150px;
     }
 
@@ -607,4 +834,29 @@ header {
         max-width: 100%;
     }
 
+    /* pagina pj */
+    .header_infos_perfil_provedor {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .img_infos_perfil_provedor {
+        height: 100px;
+        width: 100px;
+    }
+
+    .btn_editar_perfil_provedor button {
+        width: 65px !important;
+        height: 25px !important;
+        margin: 5px;
+    }
+
+    /*perfil*/
+    .container-atualizar_usuario {
+        width: 90% !important;
+    }
+
+    .main {
+        width: 90%;
+    }
 }

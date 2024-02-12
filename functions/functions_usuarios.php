@@ -103,12 +103,11 @@ function listarUsuarios($conn, $id = null)
         return []; // Retorna um array vazio se não houver usuários
     }
 }
-function atualizarUsuario($conn, $id = NULL, $nome = NULL, $email = NULL, $numero = NULL, $pontos = NULL)
+function atualizarUsuario($conn, $id, $nome = NULL, $email = NULL, $numero_pontos = NULL, $senha = NULL)
 {
-    if ($id === NULL || (empty($nome) && empty($email) && empty($numero) && empty($pontos))) {
-        return false; // Return false if no ID or fields to update are provided
-    }
-    // Prepare the base query
+    if ($id === NULL)
+        return false;
+
     $query = "UPDATE usuarios SET";
 
     $updates = [];
@@ -127,43 +126,52 @@ function atualizarUsuario($conn, $id = NULL, $nome = NULL, $email = NULL, $numer
         $bindParams[] = &$email;
     }
 
-    if (!empty($numero)) {
-        $updates[] = " usuario_numero=?";
-        $types .= "s";
-        $bindParams[] = &$numero;
-    }
-    if (!empty($pontos)) {
+    if (!empty($numero_pontos)) {
         $updates[] = " usuario_pontos=?";
-        $types .= "i"; // Corrigindo para 'i' (inteiro) para pontos
-        $bindParams[] = &$pontos;
+        $types .= "s";
+        $bindParams[] = &$numero_pontos;
     }
 
+    // Verifica se há campos para atualizar
 
-    $query .= " " . implode(",", $updates);
-    $query .= " WHERE usuario_id = ?";
-    $types .= "i";
-    $bindParams[] = &$id;
+    if (!empty($updates)) {
+        $query .= " " . implode(",", $updates);
+        $query .= " WHERE usuario_id = ?";
+        $types .= "i";
+        $bindParams[] = &$id;
 
+        $bindParams = array_merge(array($types), $bindParams);
+        $stmt = mysqli_prepare($conn, $query);
+        if ($stmt === false) {
+            return "ERRO: " . mysqli_error($conn);
+        }
 
-    // Combine types string with bindParams array
-    $bindParams = array_merge(array($types), $bindParams);
+        mysqli_stmt_bind_param($stmt, ...$bindParams);
 
-    // Prepare and bind parameters
-    $stmt = mysqli_prepare($conn, $query);
-    if ($stmt === false) {
-        return "ERRO: " . mysqli_error($conn);
-    }
+        if (mysqli_stmt_execute($stmt)) {
+            mysqli_stmt_close($stmt);
+            $usuario = listarUsuarios($conn, $id);
+            if ($_SESSION) {
+                $_SESSION["usuario"] =
+                    [
 
-    mysqli_stmt_bind_param($stmt, ...$bindParams);
-
-    // Execute the prepared statement
-    if (mysqli_stmt_execute($stmt)) {
-        mysqli_stmt_close($stmt);
-        return "true";
+                        'usuario_id' => $usuario[0]['usuario_id'],
+                        'usuario_nome' => $usuario[0]['usuario_nome'],
+                        'usuario_email' => $usuario[0]['usuario_email'],
+                        'usuario_pontos' => $usuario[0]['usuario_pontos'],
+                        'usuario_numero' => $usuario[0]['usuario_numero']
+                    ];
+            }
+            return "true";
+        } else {
+            return "ERRO: " . mysqli_stmt_error($stmt);
+        }
     } else {
-        return "ERRO: " . mysqli_stmt_error($stmt);
+        return "ERRO: Nenhum campo para atualizar foi fornecido.";
     }
 }
+
+
 function apagarUsuario($conn, $id)
 {
     $query = "DELETE FROM Usuarios WHERE id=?";
@@ -180,4 +188,3 @@ function apagarUsuario($conn, $id)
         return false; // Falha ao apagar o usuário
     }
 }
-?>

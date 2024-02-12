@@ -5,6 +5,7 @@ require('../functions/functions_servicos.php');
 
 $id_servico = isset($_REQUEST["id_servico"]) ? $_REQUEST["id_servico"] : NULL;
 $id_usuario = isset($_REQUEST["id_usuario"]) ? $_REQUEST["id_usuario"] : NULL;
+
 $pontos_necessarios = null;
 $pontos_usuario = null;
 

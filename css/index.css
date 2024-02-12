@@ -86,7 +86,9 @@ header {
     height: 100%;
     transition: .8s ease-in-out;
     background: var(--cor-1);
-    transform: translateY(-60px);
+    transform: translateY(-190px);
+    border-top-left-radius: 60% 10%;
+    border-top-right-radius: 60% 10%;
 }
 
 label {
@@ -157,53 +159,58 @@ button:hover {
 .login {
     height: 500px;
     background: var(--cor-0);
-    border-top-left-radius: 60% 10%;
-    border-top-right-radius: 60% 10%;
-    transform: translateY(-190px);
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    transform: translateY(-60px);
     transition: .8s ease-in-out;
+    position: relative;
 }
 
 .login label {
     color: var(--cor-1);
-    transform: scale(.6);
+    transform: scale(1.1);
     transition: .8s ease-in-out;
 }
 
 #chk:checked~.login {
-    transform: translateY(-625px);
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
+    transform: translateY(370px);
+    border-top-left-radius: 60% 10%;
+    border-top-right-radius: 60% 10%;
+    z-index: 1;
 }
 
 #chk:checked~.login label {
-    transform: scale(1);
+    transform: scale(.6);
 }
 
 .signup label {
-    transform: scale(1);
+    transform: scale(.6);
     transition: .8s ease-in-out;
 }
 
 #chk:checked~.signup {
     transform: scale(.6);
-    transform: translateY(350px);
-    z-index: 1;
-    border-top-left-radius: 60% 10%;
-    border-top-right-radius: 60% 10%;
+    transform: translateY(-620px);
+    z-index: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+
 }
 
 #chk:checked~.signup label {
-    transform: scale(.6);
+    transform: scale(1.1);
 }
 
 @media only screen and (max-width: 600px) {
     #chk:checked~.login {
-        transform: translateY(-620px);
+        /* transform: translateY(-620px); */
+        transform: translateY(370px);
     }
 
     #chk:checked~.signup {
         transform: scale(.6);
-        transform: translateY(340px);
+        /* transform: translateY(340px); */
+        transform: translateY(-620px);
     }
 
     .login {

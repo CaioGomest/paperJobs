@@ -49,11 +49,11 @@ function criaServico($conn, $autor_id, $titulo, $descricao, $valor, $status, $or
     }
 }
 
-function listaServicos($conn, $id = NULL, $servico_autor_id = NULL, $titulo = NULL, $tipo = NULL, $status = NULL, $order_by = NULL, $limite = NULL)
+function listaServicos($conn, $id = NULL, $servico_autor_id = NULL, $titulo = NULL, $tipo = NULL, $status = NULL, $order_by = NULL, $limite = NULL, $servico_ativo = null)
 {
     $query = "SELECT servicos.*, usuarios.usuario_nome, servicos_status.servico_status_nome, servicos_status.servico_status_quantidade_desbloqueado FROM servicos 
               INNER JOIN servicos_status ON servicos.servico_status = servicos_status.servico_status_id
-              INNER JOIN usuarios ON servicos.servico_autor_id = usuarios.usuario_id WHERE 1=1 ";
+              INNER JOIN usuarios ON servicos.servico_autor_id = usuarios.usuario_id WHERE 1=1";
 
     // WHERE
     if (is_numeric($id))
@@ -66,14 +66,34 @@ function listaServicos($conn, $id = NULL, $servico_autor_id = NULL, $titulo = NU
         $query .= " AND servico_nome LIKE '%" . mysqli_real_escape_string($conn, $titulo) . "%'";
 
     if (!empty($tipo))
-        $query .= " AND servico_nome LIKE '%" . mysqli_real_escape_string($conn, $titulo) . "%'";
+        $query .= " AND servico_tipo LIKE '%" . mysqli_real_escape_string($conn, $tipo) . "%'"; // Corrigido para servico_tipo
 
     if (!empty($status))
-        $query .= " AND servico_nome LIKE '%" . mysqli_real_escape_string($conn, $titulo) . "%'";
+        $query .= " AND servico_status_nome LIKE '%" . mysqli_real_escape_string($conn, $status) . "%'"; // Corrigido para servico_status_nome
+
+    if (is_numeric($servico_ativo))
+        $query .= " AND servico_ativo = " . mysqli_real_escape_string($conn, $servico_ativo);
 
     if (!empty($order_by))
-        $query .= sprintf(" ORDER BY %s ", mysqli_real_escape_string($conn, $order_by) . " DESC");
+        $query .= " ORDER BY servico_data $order_by";
+
+    if (!empty($limite)) {
+        $query .= " LIMIT " . mysqli_real_escape_string($conn, $limite);
+    }
     //echo $query;
+
+    $result = mysqli_query($conn, $query);
+
+    if ($result !== FALSE) {
+        return $result;
+    } else {
+        return "ERRO: " . mysqli_error($conn);
+    }
+}
+
+function listaTiposServicos($conn)
+{
+    $query = "SELECT * FROM servico_tipo WHERE 1=1 ORDER BY servico_tipo_nome ASC";
 
     $result = mysqli_query($conn, $query);
 
@@ -82,6 +102,7 @@ function listaServicos($conn, $id = NULL, $servico_autor_id = NULL, $titulo = NU
     else
         return "ERRO: " . mysqli_error($conn);
 }
+
 function totalServicos($conn, $titulo = NULL, $cliente_id = NULL, $tipo = NULL, $status = NULL)
 {
     $query = "SELECT COUNT(1) FROM servico WHERE 1 = 1";
@@ -106,22 +127,31 @@ function totalServicos($conn, $titulo = NULL, $cliente_id = NULL, $tipo = NULL, 
     } else
         return "ERRO: " . mysqli_error($conn);
 }
-function alteraServicos($conn, $id, $titulo)
+function alteraServicos($conn, $id, $titulo = null, $cancelar_servico = null)
 {
-    $query = sprintf(
-        "UPDATE servico SET servico_nome = '%s'",
-        mysqli_escape_string($conn, $titulo),
+    $query = "UPDATE servicos SET ";
 
-    );
+    if ($titulo !== null) {
+        $query .= "servico_nome = '" . mysqli_real_escape_string($conn, $titulo) . "'";
+    }
 
-    $query .= sprintf(" WHERE servico_id = %d", mysqli_escape_string($conn, $id));
+    if (is_numeric($cancelar_servico)) {
+        if ($titulo !== null) {
+            $query .= ", ";
+        }
+        $query .= "servico_ativo = " . mysqli_real_escape_string($conn, $cancelar_servico);
+    }
+
+    $query .= " WHERE servico_id = " . mysqli_real_escape_string($conn, $id);
 
     //echo $query;
-    if (mysqli_query($conn, $query))
+    if (mysqli_query($conn, $query)) {
         return true;
-    else
-        return " ERRO: " . mysqli_error($conn);
+    } else {
+        return "ERRO: " . mysqli_error($conn);
+    }
 }
+
 function desbloquearServico($conn, $id_usuario, $id_servico, $pontos_necessarios, $pontos_usuario)
 {
     $varfica_servico_desbloqueado = verificaServicoDesbloqueado($conn, $id_servico, $id_usuario);
@@ -129,7 +159,7 @@ function desbloquearServico($conn, $id_usuario, $id_servico, $pontos_necessarios
         if ($pontos_usuario >= $pontos_necessarios) {
             $pontos_restante_usuario = $pontos_usuario - $pontos_necessarios;
 
-            $usuario_atualizado = atualizarUsuario($conn, $id_usuario, NULL, NULL, NULL, $pontos_restante_usuario);
+            $usuario_atualizado = atualizarUsuario($conn, $id_usuario, NULL, NULL, $pontos_restante_usuario, NULL);
             registraServicoDesbloqueado($conn, $id_servico, $id_usuario);
             return $usuario_atualizado;
         } else {
@@ -153,18 +183,26 @@ function registraServicoDesbloqueado($conn, $id_servico, $id_usuario)
 }
 function verificaServicoDesbloqueado($conn, $id_servico, $id_usuario = null)
 {
-    $query = "SELECT count(1) as count FROM servicos_desbloqueados WHERE servico_id = $id_servico ";
+    // Constrói a consulta SQL básica
+    $query = "SELECT COUNT(1) AS count FROM servicos_desbloqueados WHERE servico_id = " . mysqli_real_escape_string($conn, $id_servico);
 
-    if (is_numeric($id_usuario))
+    // Adiciona a condição para o ID do usuário, se fornecido
+    if (is_numeric($id_usuario)) {
         $query .= " AND usuario_id = " . mysqli_real_escape_string($conn, $id_usuario);
-
-    //echo $query;
+    }
+    // echo $query;
+    // Executa a consulta SQL
     $result = mysqli_query($conn, $query);
 
+    // Verifica se a consulta foi bem-sucedida
     if ($result !== FALSE) {
+        // Obtém a linha do resultado
         $row = mysqli_fetch_assoc($result);
-        return $row["count"]; // Retorna o valor da contagem
+        // Retorna o valor da contagem
+        return $row["count"];
     } else {
+        // Retorna uma mensagem de erro caso ocorra algum problema com a consulta
         return "ERRO: " . mysqli_error($conn);
     }
 }
+

@@ -49,15 +49,15 @@ if ($titulo) {
 
                     <h3 style="margin:15px 0px;" for="Título do pedido">Título do pedido</h3>
                     <select class="input_padrao" name="titulo" id="">
-                        <option value="Desenvolvimento de Site">Desenvolvimento de Site</option>
-                        <option value="Desenvolvimento de Sistema">Desenvolvimento de Sistema</option>
-                        <option value="Desenvolvimento de Design">Desenvolvimento de Design</option>
-                        <option value="Desenvolvimento de Identidade Visual">Desenvolvimento de Identidade Visual
-                        <option value="Desenvolvimento de Identidade Visual">Manutenção de Software
-                        <option value="Desenvolvimento de Identidade Visual">Assessoria
-                        <option value="Desenvolvimento de Identidade Visual">Consulta
-                        </option>
-                        <option value="Prestação de serviço">Prestação de serviço</option>
+                        <?php
+                        $tipoServicos = listaTiposServicos($conn);
+                        foreach ($tipoServicos as $tipoServico) {
+                            ?>
+                            <option value="<?php echo $tipoServico['servico_tipo_nome']; ?>">
+                                <?php echo $tipoServico['servico_tipo_nome']; ?></option>
+                            <?php
+                        }
+                        ?>
                     </select>
 
                     <h3 for="Descrição">Descrição <img src="assets/icons/asterisco.svg" alt=""></h3>

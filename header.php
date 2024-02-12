@@ -4,16 +4,51 @@ require('conexao.php');
 require('functions/functions_usuarios.php');
 require('functions/functions_servicos.php');
 
+if (!isset($_SESSION["usuario"]) || $_SESSION["usuario"] === null) {
+    deslogar();
+}
+
+
+function getFileHash($file)
+{
+    return $file . '?v=' . rand(10000, 1000000000000);
+}
+getFileHash("header.php");
+
 $usuario_dados = listarUsuarios($conn, $_SESSION["usuario"]["usuario_id"]);
 
 
-if (empty($usuario_dados[0]['usuario_id']))
-    deslogar();
 
 if (isset($_GET["deslogar"]) && $_GET["deslogar"] == "true")
     deslogar();
 
+
+$alert_mensagem_sucesso = isset($_REQUEST["alert_mensagem_sucesso"]) ? $_REQUEST["alert_mensagem_sucesso"] : NULL;
+$alert_mensagem_erro = isset($_REQUEST["alert_mensagem_erro"]) ? $_REQUEST["alert_mensagem_erro"] : NULL;
+
+if ($alert_mensagem_sucesso)
+    echo "<div class='alert_mensagem_sucesso'>$alert_mensagem_sucesso</div>";
+if ($alert_mensagem_erro)
+    echo "<div class='alert_mensagem_erro'>$alert_mensagem_erro</div>";
+
+
 ?>
+<script>
+    function mostrarMensagem(selector) {
+        var mostrarMensagem = document.querySelector(selector);
+        if (mostrarMensagem) {
+            setTimeout(function () {
+                mostrarMensagem.classList.add("mostrar");
+            }, 500);
+            setTimeout(function () {
+                mostrarMensagem.classList.remove("mostrar");
+            }, 3000);
+        }
+    }
+
+    mostrarMensagem(".alert_mensagem_sucesso");
+    mostrarMensagem(".alert_mensagem_erro");
+</script>
 
 <head>
     <meta charset="UTF-8">
@@ -24,7 +59,6 @@ if (isset($_GET["deslogar"]) && $_GET["deslogar"] == "true")
     <title>PaperJobs</title>
 </head>
 <header>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <link rel="icon" type="image/x-icon" href="assets/logos/paperjobs">
     <div class="container_header">
         <div class="logo"><a href="home.php"><img style="width: 100px;" src="assets/logos/paperjobs.svg" alt="logo"></a>
@@ -43,8 +77,7 @@ if (isset($_GET["deslogar"]) && $_GET["deslogar"] == "true")
         <div class="container_option_header">
             <a href="home.php" class="option_header">Home</a>
             <a href="shop.php" class="option_header">Shop</a>
-
-            <a href="servicos.php" class="option_header">Serviços</a>
+            <a href="perfil_pj.php" class="option_header">Perfis PJ</a>
             <div class="moedas_usuario option_header">
                 <img class="icon_ponto" src="assets/icons/Pontos.png" alt="">
                 <span><?php echo $usuario_dados[0]["usuario_pontos"] ?></span>
@@ -53,11 +86,71 @@ if (isset($_GET["deslogar"]) && $_GET["deslogar"] == "true")
                 <div class="perfil_usuario option_header">
                     <img src="assets/icons/perfil.png" alt="icon_perfil">
                     <span>Perfil</span>
+                    <div class="opcoes_perfil">
+                        <div class="btn_modo" align="center">Modo</div>
+                        <div class="btn_deslogar"
+                            style="width: 100%;height: 35px;border-radius: 30px;font-size: 1em; font-weight: bold;">Sair
+                        </div>
+                    </div>
                 </div>
             </a>
         </div>
+
     </div>
 </header>
+<style>
+    .opcoes_perfil {
+        border-radius: 15px;
+
+        visibility: hidden;
+        flex-direction: column;
+        position: absolute;
+        top: 55px;
+        width: 75px;
+        right: 5;
+        background-color: #F0E9E9;
+        padding: 10px;
+        height: 0px;
+        overflow: hidden;
+    }
+
+    .perfil_usuario:hover .opcoes_perfil {
+        visibility: visible;
+        transition: .2s;
+        display: flex;
+        height: 80px;
+    }
+
+    .opcoes_perfil:hover {
+        visibility: visible;
+        transition: .2s;
+        display: flex;
+        height: 80px;
+    }
+
+
+    /* Estilo dos botões */
+    .opcoes_perfil .btn_modo,
+    .opcoes_perfil .btn_deslogar {
+        margin-bottom: 5px;
+        cursor: pointer;
+    }
+</style>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var perfilLink = document.querySelector(".perfil_link");
+        var opcoesPerfil = document.querySelector(".opcoes_perfil");
+
+        perfilLink.addEventListener("mouseover", function () {
+            opcoesPerfil.style.display = "block";
+        });
+
+        perfilLink.addEventListener("mouseout", function () {
+            opcoesPerfil.style.display = "none";
+        });
+    });
+
+</script>
 
 <body>
     <a href="criar_servico.php">
@@ -113,6 +206,5 @@ if (isset($_GET["deslogar"]) && $_GET["deslogar"] == "true")
             <h3>Sair</h3>
         </div>
     </div>
-
 </div>
 <script src="js/javascript.js"></script>

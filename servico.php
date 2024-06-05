@@ -113,8 +113,7 @@ $quantos_desbloquearam_servico = verificaServicoDesbloqueado($conn, $id_servico,
                 success: function (response) {
 
                     if (response == "true") {
-                        alert('deu certo');
-                        window.location.reload();
+                        window.location.href = window.location.href + "&" + "alert_mensagem_sucesso=Serviço Desbloqueado!";
 
                     }
 
